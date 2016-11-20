@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MyWorldController.MainController">
+   <children>
+      <Button fx:id="leftButton" layoutX="317.0" layoutY="389.0" mnemonicParsing="false" onAction="#ClickLeftButton" text="Left" />
+      <Button fx:id="rightButton" layoutX="470.0" layoutY="389.0" mnemonicParsing="false" onAction="#ClickRightButton" text="Right" />
+      <Button fx:id="forwardButton" layoutX="382.0" layoutY="389.0" mnemonicParsing="false" onAction="#ClickForwardButton" text="Forward" />
+      <MenuBar prefHeight="29.0" prefWidth="600.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#ImportFile" text="Import" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" onMenuValidation="#ClickItems" text="Items">
+            <items>
+              <MenuItem fx:id="putMenu" mnemonicParsing="false" onAction="#PutItem" text="Put" />
+                  <MenuItem fx:id="pickMenu" mnemonicParsing="false" onAction="#PickItem" text="Pick" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Button fx:id="ImportButton" layoutX="309.0" layoutY="37.0" mnemonicParsing="false" text="Import" />
+      <HBox fx:id="mainViewBox" layoutY="29.0" prefHeight="400.0" prefWidth="300.0" />
+      <HBox fx:id="itemsHbox" layoutX="300.0" layoutY="229.0" onMouseClicked="#ClickItem" prefHeight="135.0" prefWidth="294.0" />
+   </children>
+</AnchorPane>
