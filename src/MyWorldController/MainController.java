@@ -1,15 +1,17 @@
 package MyWorldController;
 
-import Action.ItemsAction;
+import Action.MainDataAction;
 import Action.TextFlowOutput;
 import Action.XMLReader;
+import MainEntry.MyMainEntry;
 import Model.Item;
-import Model.Location;
+import Model.World;
 import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
@@ -23,38 +25,42 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Created by cbhzhun on 2016/11/19.
  */
-public class MainController {
-    protected static HashMap<Integer, Location> myWorld;
+public class MainController implements Initializable{
+    private MyMainEntry application;
+   /* protected static HashMap<Integer, Location> allLocations;
     protected static List<Item> myItems;
     protected static Location currentLocation;
     protected static int currentFace, currentItemId, currentPickItemId, currentLocationId;
+    private TextFlowOutput textFlowOutput;*/
+    protected static World myWold;
     private TextFlowOutput textFlowOutput;
-    @FXML
-    private ScrollPane textContainer;
-    @FXML
-    private MenuItem putMenu, pickMenu;
-    XMLReader xmlReader;
-    ItemsAction itemsAction;
-    @FXML
-    private HBox mainViewBox, itemsHbox,mapViewBox;
-    @FXML
-    private Button leftButton, forwardButton, rightButton;
+
+    @FXML private ScrollPane textContainer;
+    @FXML private MenuItem putMenu, pickMenu;
+    protected static XMLReader xmlReader;
+    private MainDataAction mainDataAction;
+    @FXML private HBox mainViewBox, itemsHbox,mapViewBox;
+    @FXML private Button leftButton, forwardButton, rightButton;
     private ImageView mainImageView,mapImageView,naviImageView;
-    @FXML
-    private TextFlow textFlow;
+    @FXML private TextFlow textFlow;
+
+    public void setApp(MyMainEntry application){
+        this.application = application;
+    }
 
     public void Initialise() {
+        myWold = new World();
         xmlReader = new XMLReader();
-        myWorld = new HashMap<>();
-        myItems = new ArrayList<>();
-        itemsAction = new ItemsAction();
+       // allLocations = new HashMap<>();
+       // myItems = new ArrayList<>();
+        mainDataAction = new MainDataAction();
         textFlowOutput = new TextFlowOutput();
 
         mapImageView = new ImageView();
@@ -77,8 +83,6 @@ public class MainController {
         rightButton.setDisable(true);
         forwardButton.setDisable(true);
         itemsHbox.setSpacing(9);
-        //  mainImageView = new ImageView();
-        //   mainImageView.setImage(new Image("huaji.jpg"));
 
         textFlow.getChildren().addListener(
                 (ListChangeListener<Node>) ((change) -> {
@@ -88,54 +92,62 @@ public class MainController {
                 }));
     }
 
-    public void ImportFile(ActionEvent event) {
+    public void ImportFile() {
         Stage stage = new Stage();
         stage.setTitle("Choose XML File");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XML", "*.xml"));
         File file = fileChooser.showOpenDialog(stage);
-        System.out.println(file);
-        xmlReader.setXmlFile(file);
-        xmlReader.read();
-        myWorld = xmlReader.readLocations();
-        myItems = xmlReader.readItems();
-        currentLocationId = xmlReader.getInitLocation();
-        currentLocation = myWorld.get(currentLocationId);
-        currentFace = xmlReader.getCurrentFace();
-        leftButton.setDisable(false);
-        rightButton.setDisable(false);
-        mapImageView.setImage(xmlReader.getMap());
-        naviImageView.setImage(xmlReader.getNaviArrow());
-        showImage();
-        showItem();
-        showMap();
-        checkForwar();
+        Import(file);
     }
 
+    public void Import(File file){
+        try {
+            mainDataAction.readXMLFile(file);
+            leftButton.setDisable(false);
+            rightButton.setDisable(false);
+            mapImageView.setImage(xmlReader.getMap());
+            naviImageView.setImage(xmlReader.getNaviArrow());
+            showImage();
+            showItem();
+            showMap();
+            checkForward();
+        }catch (Exception e){
+            e.printStackTrace();
+            ThrowError();
+        }
+    }
+    public void ThrowError(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("ERROR");
+        alert.setHeaderText("Cannot read XML file!");
+        alert.setContentText("Please make sure this XML file is valid！");
+        alert.showAndWait();
+    }
     public void PutItem() {
         textFlow.getChildren().add(textFlowOutput.outputPutItem());
-        itemsAction.PutItemAction();
+        mainDataAction.PutItemAction();
         showItem();
         showImage();
     }
 
     public void PickItem() {
         textFlow.getChildren().add(textFlowOutput.outputPickItem());
-        itemsAction.PickItemAction();
+        mainDataAction.PickItemAction();
         showImage();
         showItem();
     }
 
     public void showItem() {
         itemsHbox.getChildren().clear();
-        myItems.forEach(item -> {
-            currentItemId = -1;
+        myWold.getMyItems().forEach(item -> {
+            myWold.setCurrentItemId(-1);
             ImageView imageView = new ImageView();
             imageView.setImage(item.getImage());
             imageView.setId(String.valueOf(item.getItemId()));
             imageView.setOnMouseClicked(event -> {
-                currentItemId = Integer.parseInt(imageView.getId());
+                myWold.setCurrentItemId(Integer.parseInt(imageView.getId()));
                 imageView.setEffect(new DropShadow(20, Color.BLACK));
                 textFlow.getChildren().add(textFlowOutput.outputSelectItem());
             });
@@ -145,7 +157,7 @@ public class MainController {
 
     public void ClickItem() {
         itemsHbox.getChildren().forEach(node -> {
-            if (Integer.parseInt(node.getId()) != currentItemId) {
+            if (Integer.parseInt(node.getId()) != myWold.getCurrentItemId()) {
                 node.setEffect(new DropShadow(0, Color.BLACK));
             }
         });
@@ -153,12 +165,12 @@ public class MainController {
 
     public void showImage() {
 
-        mainImageView.setImage(currentLocation.getLocationMap(currentFace));// set location image as main background image
+        mainImageView.setImage(myWold.getCurrentLocation().getLocationMap(myWold.getCurrentFace()));// set location image as main background image
         mainViewBox.getChildren().clear();
         //Show items in the main viw, create a group to contain all items ImageView
         Group groupView = new Group();
         groupView.getChildren().add(mainImageView);
-        List<Item> tmpItems = currentLocation.getItem();
+        List<Item> tmpItems = myWold.getCurrentLocation().getItem();
         //put all items into the group
         for (int i = 0; i < tmpItems.size(); i++) {
             ImageView tmpImageView = new ImageView(tmpItems.get(i).getImage());
@@ -173,10 +185,10 @@ public class MainController {
             groupView.getChildren().forEach(node -> {
                 node.setEffect(null);
             });
-            currentPickItemId = -1;
+            myWold.setCurrentPickItemId(-1);
             if (event.getPickResult().getIntersectedNode().getId() != "999") {//if image is background image, no effect
                 event.getPickResult().getIntersectedNode().setEffect(new InnerShadow(20, Color.BLACK));
-                currentPickItemId = Integer.parseInt(event.getPickResult().getIntersectedNode().getId());
+                myWold.setCurrentPickItemId(Integer.parseInt(event.getPickResult().getIntersectedNode().getId()));
                 textFlow.getChildren().add(textFlowOutput.outputSelectPickItem());
             }
         });
@@ -184,58 +196,69 @@ public class MainController {
     }
     public void showMap(){
         mapViewBox.getChildren().clear();
-        naviImageView.setRotate((360.0/currentLocation.getImageNumber()) * (currentFace) );
-        naviImageView.setX(currentLocation.getX());
-        naviImageView.setY(currentLocation.getY());
+        naviImageView.setRotate((360.0/myWold.getCurrentLocation().getImageNumber()) * (myWold.getCurrentFace()) );
+        naviImageView.setX(myWold.getCurrentLocation().getX());
+        naviImageView.setY(myWold.getCurrentLocation().getY());
         Group mapGroup = new Group(mapImageView,naviImageView);
         mapViewBox.getChildren().add(mapGroup);
     }
-    public void ClickLeftButton(ActionEvent event) {
-        currentFace -= 1;
-        if (currentFace == 0) currentFace = currentLocation.getImageNumber();
+    public void ClickLeftButton() {
+        myWold.setCurrentFace(myWold.getCurrentFace() - 1);
+        if (myWold.getCurrentFace() == 0) myWold.setCurrentFace(myWold.getCurrentLocation().getImageNumber());
         showImage();
         showMap();
-        checkForwar();
+        checkForward();
         textFlow.getChildren().add(textFlowOutput.outputTurnLeft());
     }
 
-    public void ClickRightButton(ActionEvent event) {
-        currentFace = currentFace % currentLocation.getImageNumber() + 1;
+    public void ClickRightButton() {
+        myWold.setCurrentFace(myWold.getCurrentFace() % myWold.getCurrentLocation().getImageNumber() + 1 );
         showImage();
         showMap();
-        checkForwar();
+        checkForward();
         textFlow.getChildren().add(textFlowOutput.outputTurnRight());
     }
 
-    public void ClickForwardButton(ActionEvent event) {
-        myWorld.replace(currentLocationId, currentLocation);
-        currentLocationId = currentLocation.getForward(currentFace);
-        currentFace = currentLocation.getForwardImage(currentFace);
-        currentLocation = myWorld.get(currentLocationId);
+    public void ClickForwardButton() {
+        myWold.replace(myWold.getCurrentLocationId(),myWold.getCurrentLocation());
+       // allLocations.replace(currentLocationId, currentLocation);
+        myWold.setCurrentLocationId(myWold.getCurrentLocation().getForward(myWold.getCurrentFace()));
+        //currentLocationId = currentLocation.getForward(currentFace);
+        myWold.setCurrentFace(myWold.getCurrentLocation().getForwardImage(myWold.getCurrentFace()));
+       // currentFace = currentLocation.getForwardImage(currentFace);
+        myWold.setCurrentLocation(myWold.getAllLocations().get(myWold.getCurrentLocationId()));
+        //currentLocation = allLocations.get(currentLocationId);
         showImage();
         showMap();
-        checkForwar();
+        checkForward();
         textFlow.getChildren().add(textFlowOutput.moveToNewLocation());
     }
-    public void checkForwar(){
+    public void checkForward(){
         //if this directing can go forward, make forward button visible
-        if (currentLocation.getIsForward(currentFace) == 1) {
+        if (myWold.getCurrentLocation().getIsForward(myWold.getCurrentFace()) == 1) {
             forwardButton.setDisable(false);
             textFlow.getChildren().add(textFlowOutput.outputForwardAvaiable());
         }
         else
             forwardButton.setDisable(true);
-
     }
 
     public void ClickItems() {
-        if (currentItemId == -1)
+        if (myWold.getCurrentItemId() == -1)
             putMenu.setDisable(true);
         else
             putMenu.setDisable(false);
-        if (currentPickItemId == -1)
+        if (myWold.getCurrentPickItemId() == -1)
             pickMenu.setDisable(true);
         else
             pickMenu.setDisable(false);
+    }
+    public void quitApplication(){
+        System.exit(0);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
     }
 }
