@@ -41,6 +41,12 @@ public class XMLReader {
         }
         return myItems;
     }
+    public Image getMap(){
+        return new Image("Source/" + rootElement.element("MapUrl").getText());
+    }
+    public Image getNaviArrow(){
+        return new Image("Source/" + rootElement.element("NaviImageUrl").getText());
+    }
     public HashMap<Integer, Location> readLocations(){
         HashMap<Integer, Location> myWorld = new HashMap<>();
 
@@ -48,6 +54,8 @@ public class XMLReader {
         for(int i = 1;i <= locationNumber;i++){
             Element element = rootElement.element(String.format("Location%d", i));
             Location location = new Location(element.element("LocationName").getText());
+            location.setX(Double.parseDouble(element.attributeValue("X")));
+            location.setY(Double.parseDouble(element.attributeValue("Y")));
             int imageNumber = Integer.parseInt(element.element("ImagesNumber").getText());
             location.setImageNumber(imageNumber);
             for(int j= 1; j<=imageNumber;j++){

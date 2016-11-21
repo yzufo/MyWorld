@@ -12,11 +12,32 @@ import java.util.List;
 public class Location {
     private HashMap<Integer,Image> locationMap;
     private String name;
-    private HashMap<Integer,Integer> forward;
-    private HashMap<Integer,Integer> forwardImage;
-    private HashMap<Integer,Integer> isForward;
+    private HashMap<Integer,Integer> forward,forwardImage,isForward;
     private List<Item> items;
+    private double X,Y;
     private int imageNumber;
+
+
+    public String getName() {
+        return name;
+    }
+
+    public double getX() {
+        return X;
+    }
+
+    public void setX(double x) {
+        X = x;
+    }
+
+    public double getY() {
+        return Y;
+    }
+
+    public void setY(double y) {
+        Y = y;
+    }
+
     public void addItem(Item item){
         items.add(item);
     }

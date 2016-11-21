@@ -1,12 +1,13 @@
-package MyWorldController;
+package Action;
 
 import Model.Item;
+import MyWorldController.MainController;
 
 /**
  * Created by cbhzhun on 2016/11/20.
  */
-public class ItemsController extends MainController {
-    public ItemsController(){
+public class ItemsAction extends MainController {
+    public ItemsAction(){
         currentItemId = currentPickItemId = -1;
     }
     public void PutItemAction(){

@@ -1,17 +1,19 @@
 <?xml version="1.0" ?> 
 <World>
 	<Name>Gateway Apts Public Area</Name>
+	<MapUrl>Images/Map/1.jpg</MapUrl>
+	<NaviImageUrl>Images/Map/2.png</NaviImageUrl>
 	<LocationNumber>6</LocationNumber>
 	<CurrentLocation>1</CurrentLocation>
 	<CurrentFace>1</CurrentFace>
 	<ItemsNumber>4</ItemsNumber>
-	<Location1 Id="1">
+	<Location1 Id="1" X="180" Y="90">
 		<LocationName>ReceptionCorner</LocationName>
 		<ImagesNumber>4</ImagesNumber>
 		<Images1 Id="1" isForward="1">
 			<Url>Images/ReceptionCorner/1.jpg</Url>
 			<ForwardLocationId>3</ForwardLocationId>
-			<ForwardImage>3</ForwardImage>
+			<ForwardImage>1</ForwardImage>
 		</Images1>
 		<Images2 Id="2" isForward="0">
 			<Url>Images/ReceptionCorner/2.jpg</Url>
@@ -19,86 +21,86 @@
 		<Images3 Id="3" isForward="1">
 			<Url>Images/ReceptionCorner/3.jpg</Url>
 			<ForwardLocationId>4</ForwardLocationId>
-			<ForwardImage>1</ForwardImage>
+			<ForwardImage>3</ForwardImage>
 		</Images3>
 		<Images4 Id="4" isForward="1">
 			<Url>Images/ReceptionCorner/4.jpg</Url>
 			<ForwardLocationId>2</ForwardLocationId>
-			<ForwardImage>1</ForwardImage>
+			<ForwardImage>4</ForwardImage>
 		</Images4>
 	</Location1>
 
-	<Location2 Id="2">
+	<Location2 Id="2" X="170" Y="40">
 		<LocationName>Gym</LocationName>
 		<ImagesNumber>4</ImagesNumber>
 		<Images1 Id="1" isForward="0">
 			<Url>Images/Gym/1.jpg</Url>
 		</Images1>
-		<Images2 Id="2" isForward="0">
+		<Images2 Id="2" isForward="1">
 			<Url>Images/Gym/2.jpg</Url>
-		</Images2>
-		<Images3 Id="3" isForward="1">
-			<Url>Images/Gym/3.jpg</Url>
 			<ForwardLocationId>1</ForwardLocationId>
 			<ForwardImage>2</ForwardImage>
+		</Images2>
+		<Images3 Id="3" isForward="0">
+			<Url>Images/Gym/3.jpg</Url>
 		</Images3>
 		<Images4 Id="4" isForward="0">
 			<Url>Images/Gym/4.jpg</Url>
 		</Images4>
 	</Location2>
 
-	<Location3 Id="3">
+	<Location3 Id="3" X="230" Y="70">
 		<LocationName>Cinema</LocationName>
 		<ImagesNumber>4</ImagesNumber>
-		<Images1 Id="1" isForward="1">
+		<Images1 Id="1" isForward="0">
 			<Url>Images/Cinema/1.jpg</Url>
-			<ForwardLocationId>1</ForwardLocationId>
-			<ForwardImage>3</ForwardImage>
 		</Images1>
 		<Images2 Id="2" isForward="0">
 			<Url>Images/Cinema/2.jpg</Url>
 		</Images2>
-		<Images3 Id="3" isForward="0">
+		<Images3 Id="3" isForward="1">
 			<Url>Images/Cinema/3.jpg</Url>
+			<ForwardLocationId>1</ForwardLocationId>
+			<ForwardImage>3</ForwardImage>
 		</Images3>
 		<Images4 Id="4" isForward="0">
 			<Url>Images/Cinema/4.jpg</Url>
 		</Images4>
 	</Location3>
 
-	<Location4 Id="4">
+	<Location4 Id="4" X="110" Y="90">
 		<LocationName>Aisle</LocationName>
 		<ImagesNumber>4</ImagesNumber>
 		<Images1 Id="1" isForward="1">
 			<Url>Images/Aisle/1.jpg</Url>
-			<ForwardLocationId>6</ForwardLocationId>
-			<ForwardImage>3</ForwardImage>
+			<ForwardLocationId>1</ForwardLocationId>
+			<ForwardImage>1</ForwardImage>
 		</Images1>
-		<Images2 Id="2" isForward="1">
+		<Images2 Id="2" isForward="0">
 			<Url>Images/Aisle/2.jpg</Url>
-			<ForwardLocationId>5</ForwardLocationId>
-			<ForwardImage>3</ForwardImage>
 		</Images2>
 		<Images3 Id="3" isForward="1">
 			<Url>Images/Aisle/3.jpg</Url>
-			<ForwardLocationId>1</ForwardLocationId>
-			<ForwardImage>1</ForwardImage>
+			<ForwardLocationId>6</ForwardLocationId>
+			<ForwardImage>3</ForwardImage>
 		</Images3>
-		<Images4 Id="4" isForward="0">
+		<Images4 Id="4" isForward="1">
 			<Url>Images/Aisle/4.jpg</Url>
+			<ForwardLocationId>5</ForwardLocationId>
+			<ForwardImage>4</ForwardImage>
 		</Images4>
 	</Location4>
 
-	<Location5 Id="5">
+	<Location5 Id="5" X="110" Y="50">
 		<LocationName>Cinema</LocationName>
 		<ImagesNumber>4</ImagesNumber>
-		<Images1 Id="1" isForward="1">
+		<Images1 Id="1" isForward="0">
 			<Url>Images/Laundry/1.jpg</Url>
-			<ForwardLocationId>4</ForwardLocationId>
-			<ForwardImage>4</ForwardImage>
 		</Images1>
-		<Images2 Id="2" isForward="0">
+		<Images2 Id="2" isForward="1">
 			<Url>Images/Laundry/2.jpg</Url>
+			<ForwardLocationId>4</ForwardLocationId>
+			<ForwardImage>2</ForwardImage>
 		</Images2>
 		<Images3 Id="3" isForward="0">
 			<Url>Images/Laundry/3.jpg</Url>
@@ -108,13 +110,13 @@
 		</Images4>
 	</Location5>
 
-	<Location6 Id="6">
+	<Location6 Id="6" X="50" Y="110">
 		<LocationName>CommonRoom</LocationName>
 		<ImagesNumber>4</ImagesNumber>
 		<Images1 Id="1" isForward="1">
 			<Url>Images/CommonRoom/1.jpg</Url>
 			<ForwardLocationId>4</ForwardLocationId>
-			<ForwardImage>3</ForwardImage>
+			<ForwardImage>1</ForwardImage>
 		</Images1>
 		<Images2 Id="2" isForward="0">
 			<Url>Images/CommonRoom/2.jpg</Url>
