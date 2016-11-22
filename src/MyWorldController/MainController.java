@@ -113,6 +113,7 @@ public class MainController implements Initializable{
             showItem();
             showMap();
             checkForward();
+            String tmpCSS= "/Source/MyWorld/MyWorld.css";
         }catch (Exception e){
             e.printStackTrace();
             ThrowError();
@@ -176,7 +177,8 @@ public class MainController implements Initializable{
             ImageView tmpImageView = new ImageView(tmpItems.get(i).getImage());
             tmpImageView.setFitWidth(64);
             tmpImageView.setFitHeight(64);
-            tmpImageView.setY(i * 64);
+            tmpImageView.setY(i * 64 + 5);
+            tmpImageView.setX(5);
             tmpImageView.setId(String.valueOf(tmpItems.get(i).getItemId()));
             groupView.getChildren().add(tmpImageView);
         }

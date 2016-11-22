@@ -10,21 +10,26 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * Created by cbhzhun on 2016/11/19.
  */
 public class MyMainEntry extends Application{
-    private Stage stage;
+    public static Stage stage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         System.out.println(this.getClass());
+        primaryStage.setResizable(false);
         stage = primaryStage;
         stage.setTitle("Import File");
+        stage.initStyle(StageStyle.UNDECORATED);
         loadFirstWindow();
         stage.show();
        /* FXMLLoader fxmlLoader = new FXMLLoader();
@@ -43,7 +48,7 @@ public class MyMainEntry extends Application{
             FirstController firstController = (FirstController) replaceSceneContent("../MyWorldInit.fxml");
             firstController.setApp(this);
         }catch(Exception e){
-
+            e.printStackTrace();
         }
     }
     public void loadMainWindow(File file){
@@ -58,13 +63,17 @@ public class MyMainEntry extends Application{
             }
             mainController.setApp(this);
         }catch(Exception e){
-
+            e.printStackTrace();
         }
     }
     private Initializable replaceSceneContent(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         Pane page = loader.load(this.getClass().getResource(fxml).openStream());
         Scene scene = new Scene(page);
+        Properties properties= new Properties();
+        properties.load(new FileInputStream("src/MyWorld.properties"));
+        String cssFile = properties.get("CSSFILE").toString();
+        scene.getStylesheets().add(cssFile);
         stage.setScene(scene);
         return (Initializable) loader.getController();
     }
