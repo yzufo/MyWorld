@@ -9,16 +9,21 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import java.io.File;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Created by cbhzhun on 2016/11/19.
  */
 public class XMLReader{
     private static Element rootElement;
+    private static int isRemote;
+    private static String myUrl;
     File xmlFile;
 
     public int getInitLocation() throws Exception{
@@ -66,7 +71,10 @@ public class XMLReader{
                 location.setImageNumber(imageNumber);
                 for (int j = 1; j <= imageNumber; j++) {
                     Element elementImage = element.element(String.format("Images%d", j));
-                    location.setLocationMap(j, new Image(elementImage.element("Url").getText()));
+                    if(isRemote == 1)
+                        location.setLocationMap(j, new Image(myUrl + elementImage.element("Url").getText()));
+                    else
+                        location.setLocationMap(j, new Image(elementImage.element("Url").getText()));
 
                     String isForward = elementImage.attributeValue("isForward");
                     if (isForward.equals("1")) {
@@ -89,5 +97,8 @@ public class XMLReader{
             SAXReader saxReader = new SAXReader();
             Document document = saxReader.read(xmlFile);
             this.rootElement = document.getRootElement();
+            isRemote = Integer.parseInt(rootElement.element("isRemote").getText());
+            if(isRemote == 1)
+                myUrl = rootElement.element("Url").getText();
     }
 }

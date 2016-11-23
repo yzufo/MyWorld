@@ -11,8 +11,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.awt.event.MouseEvent;
-import java.io.File;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -53,7 +55,7 @@ public class FirstController implements Initializable{
         });
     }
     @FXML
-    public void ClickImportButton(){
+    public void ClickImportButton() throws Exception{
         Stage stage = new Stage();
         stage.setTitle("Choose XML File");
         FileChooser fileChooser = new FileChooser();
@@ -62,14 +64,34 @@ public class FirstController implements Initializable{
         File file = fileChooser.showOpenDialog(stage);
         application.loadMainWindow(file);
     }
-
+    public void importFromRemote() throws Exception{
+        URL url = new URL("http://45.32.181.45/Source/MyWorld/MyWorld.xml");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.connect();
+        InputStream inputStream = con.getInputStream();
+        byte[] getData = readInputStream(inputStream);
+        File file = new File("temp.xml");
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(getData);
+        inputStream.close();
+        application.loadMainWindow(file);
+    }
     public void ClickQuitButton(){
         System.exit(1);
     }
     public void FirstController(MyMainEntry application){
 
     }
-
+    public static  byte[] readInputStream(InputStream inputStream) throws IOException {
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        while((len = inputStream.read(buffer)) != -1) {
+            bos.write(buffer, 0, len);
+        }
+        bos.close();
+        return bos.toByteArray();
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 

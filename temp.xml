@@ -1,7 +1,7 @@
 <?xml version="1.0" ?> 
 <World>
-    <isRemote>0</isRemote>
-    <Url>45.32.181.45</Url>
+    <isRemote>1</isRemote>
+    <Url>http://45.32.181.45/</Url>
 	<Name>Gateway Apts Public Area</Name>
 	<MapUrl>Source/MyWorld/Images/Map/1.jpg</MapUrl>
 	<NaviImageUrl>Source/MyWorld/Images/Map/2.png</NaviImageUrl>
