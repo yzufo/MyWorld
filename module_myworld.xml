@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_myworld" default="compile.module.myworld">
+  <dirname property="module.myworld.basedir" file="${ant.file.module_myworld}"/>
+  
+  <property name="module.jdk.home.myworld" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.myworld" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.myworld" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.myworld" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="myworld.output.dir" value="${module.myworld.basedir}/out/production/MyWorld"/>
+  <property name="myworld.testoutput.dir" value="${module.myworld.basedir}/out/test/MyWorld"/>
+  
+  <path id="myworld.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="myworld.module.production.classpath">
+    <path refid="${module.jdk.classpath.myworld}"/>
+    <pathelement location="${basedir}/../../../Downloads/dom4j-1.6.1.jar"/>
+  </path>
+  
+  <path id="myworld.runtime.production.module.classpath">
+    <pathelement location="${myworld.output.dir}"/>
+    <pathelement location="${basedir}/../../../Downloads/dom4j-1.6.1.jar"/>
+  </path>
+  
+  <path id="myworld.module.classpath">
+    <path refid="${module.jdk.classpath.myworld}"/>
+    <pathelement location="${myworld.output.dir}"/>
+    <pathelement location="${basedir}/../../../Downloads/dom4j-1.6.1.jar"/>
+  </path>
+  
+  <path id="myworld.runtime.module.classpath">
+    <pathelement location="${myworld.testoutput.dir}"/>
+    <pathelement location="${myworld.output.dir}"/>
+    <pathelement location="${basedir}/../../../Downloads/dom4j-1.6.1.jar"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.myworld">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.myworld">
+    <patternset refid="excluded.from.module.myworld"/>
+  </patternset>
+  
+  <path id="myworld.module.sourcepath">
+    <dirset dir="${module.myworld.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.myworld" depends="compile.module.myworld.production,compile.module.myworld.tests" description="Compile module MyWorld"/>
+  
+  <target name="compile.module.myworld.production" depends="register.custom.compilers" description="Compile module MyWorld; production classes">
+    <mkdir dir="${myworld.output.dir}"/>
+    <javac2 destdir="${myworld.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.myworld}/javac">
+      <compilerarg line="${compiler.args.myworld}"/>
+      <bootclasspath refid="myworld.module.bootclasspath"/>
+      <classpath refid="myworld.module.production.classpath"/>
+      <src refid="myworld.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.myworld"/>
+    </javac2>
+    
+    <copy todir="${myworld.output.dir}">
+      <fileset dir="${module.myworld.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.myworld.tests" depends="register.custom.compilers,compile.module.myworld.production" description="compile module MyWorld; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.myworld" description="cleanup module">
+    <delete dir="${myworld.output.dir}"/>
+    <delete dir="${myworld.testoutput.dir}"/>
+  </target>
+</project>

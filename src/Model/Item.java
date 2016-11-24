@@ -4,12 +4,11 @@ import javafx.scene.image.Image;
 
 /**
  * Created by cbhzhun on 2016/11/20.
+ * Object of item
  */
 public class Item {
     private Image image;
     private int itemId;
-    private int x;
-    private int y;
     private boolean isInLocation;
 
     public int getItemId() {
@@ -37,7 +36,7 @@ public class Item {
     }
 
 
-    public void Item(){
+    public void Item() {
 
     }
 }

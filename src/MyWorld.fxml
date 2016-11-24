@@ -9,15 +9,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MyWorldController.MainController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="618.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MyWorldController.MainController">
    <children>
-      <Button fx:id="rightButton" layoutX="175.0" layoutY="429.0" mnemonicParsing="false" onAction="#ClickRightButton" text="Right" />
-      <Button fx:id="forwardButton" layoutX="81.0" layoutY="429.0" mnemonicParsing="false" onAction="#ClickForwardButton" text="Forward" />
-      <MenuBar prefHeight="29.0" prefWidth="600.0">
+      <MenuBar prefHeight="29.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu mnemonicParsing="false" text="World">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#ImportFile" text="Import" />
+                  <MenuItem mnemonicParsing="false" onAction="#ClickImportFormRemote" text="Import From Remote" />
+                  <MenuItem mnemonicParsing="false" onAction="#quitApplication" text="Quit" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" onMenuValidation="#ClickItems" text="Items">
@@ -26,20 +26,17 @@
                   <MenuItem fx:id="pickMenu" mnemonicParsing="false" onAction="#PickItem" text="Pick" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
         </menus>
       </MenuBar>
-      <HBox fx:id="mainViewBox" layoutY="29.0" prefHeight="400.0" prefWidth="300.0" />
-      <HBox fx:id="itemsHbox" layoutX="304.0" layoutY="229.0" onMouseClicked="#ClickItem" prefHeight="64.0" prefWidth="294.0" />
-      <HBox fx:id="mapViewBox" layoutX="304.0" layoutY="29.0" prefHeight="200.0" prefWidth="275.0" />
-      <Button fx:id="leftButton" layoutX="14.0" layoutY="429.0" mnemonicParsing="false" onAction="#ClickLeftButton" text="Left" />
-      <ScrollPane fx:id="textContainer" hbarPolicy="NEVER" layoutX="305.0" layoutY="339.0" prefHeight="122.0" prefWidth="294.0">
+      <HBox fx:id="mainViewBox" layoutY="29.0" prefHeight="400.0" prefWidth="300.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="35.0" />
+      <HBox fx:id="itemsHbox" layoutX="305.0" layoutY="254.0" onMouseClicked="#ClickItem" prefHeight="64.0" prefWidth="275.0" AnchorPane.bottomAnchor="150.0" AnchorPane.rightAnchor="10.0" />
+      <HBox fx:id="mapViewBox" layoutX="314.0" layoutY="54.0" prefHeight="200.0" prefWidth="275.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0" />
+      <Button fx:id="rightButton" layoutX="173.0" layoutY="390.0" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#ClickRightButton" prefHeight="40.0" prefWidth="40.0" />
+      <Button fx:id="forwardButton" layoutX="133.0" layoutY="350.0" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#ClickForwardButton" prefHeight="40.0" prefWidth="40.0" />
+      <Button fx:id="leftButton" layoutX="93.0" layoutY="390.0" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#ClickLeftButton" prefHeight="40.0" prefWidth="40.0" />
+      <ScrollPane fx:id="textContainer" hbarPolicy="NEVER" layoutX="305.0" layoutY="339.0" prefHeight="122.0" prefWidth="275.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="10.0">
          <content>
-            <TextFlow fx:id="textFlow" focusTraversable="true" prefHeight="128.0" prefWidth="270.0" />
+            <TextFlow fx:id="textFlow" focusTraversable="true" prefHeight="122.0" prefWidth="275.0" />
          </content>
       </ScrollPane>
    </children>

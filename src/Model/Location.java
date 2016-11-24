@@ -8,15 +8,45 @@ import java.util.List;
 
 /**
  * Created by cbhzhun on 2016/11/19.
+ * Object of location
  */
 public class Location {
-    private HashMap<Integer,Image> locationMap;
-    private String name;
-    private HashMap<Integer,Integer> forward,forwardImage,isForward;
-    private List<Item> items;
-    private double X,Y;
-    private int imageNumber;
+    private HashMap<Integer, Image> locationMap; //save images of different directions
+    private String name; // This location's name
+    // save each directions' attributes.
+    //forward: next location
+    //forwardImage: next location's direction
+    //isForward :this direction can go forward or not
+    private HashMap<Integer, Integer> forward, forwardImage, isForward;
+    private HashMap<Integer, String> locationMapUrl;
+    private List<Item> items;//save items which have been put in this location
+    private double X, Y; // this location's position in the map
+    private int imageNumber; // How much directions in this location
 
+    /**
+     * init
+     *
+     * @param name location's name
+     */
+    public Location(String name) {
+        locationMap = new HashMap<>();
+        forward = new HashMap<>();
+        forwardImage = new HashMap<>();
+        isForward = new HashMap<>();
+        items = new ArrayList<>();
+        locationMapUrl = new HashMap<>();
+        this.name = name;
+    }
+
+    public String getLocationMapUrl(int i) {
+        return locationMapUrl.get(i);
+    }
+
+    public void setLocationMapUrl(int i, String tmpUrl) {
+        this.locationMapUrl.put(i, tmpUrl);
+    }
+
+    //Getters and Setters
 
     public String getName() {
         return name;
@@ -38,15 +68,18 @@ public class Location {
         Y = y;
     }
 
-    public void addItem(Item item){
+    public void addItem(Item item) {
         items.add(item);
     }
-    public void deleteItem(int i){
+
+    public void deleteItem(int i) {
         items.remove(i);
     }
-    public List<Item> getItem(){
+
+    public List<Item> getItem() {
         return items;
     }
+
     public int getImageNumber() {
         return imageNumber;
     }
@@ -55,41 +88,40 @@ public class Location {
         this.imageNumber = imageNumber;
     }
 
-
-
     public int getIsForward(int i) {
         return isForward.get(i);
     }
 
-    public void setIsForward(int i,int isForward) {
-        this.isForward.put(i,isForward);
+    public void setIsForward(int i, int isForward) {
+        this.isForward.put(i, isForward);
     }
-    public int getForwardImage(int i){
+
+    public int getForwardImage(int i) {
         return forwardImage.get(i);
     }
-    public void setForwardImage(int i,int j){
-        forwardImage.put(i,j);
+
+    public void setForwardImage(int i, int j) {
+        forwardImage.put(i, j);
     }
+
     public int getForward(int i) {
         return forward.get(i);
     }
 
-    public void setForward(int i,int targetid) {
-        this.forward.put(i,targetid);
+    public void setForward(int i, int targetid) {
+        this.forward.put(i, targetid);
     }
 
-    public Location(String name){
-        locationMap = new HashMap<>();
-        forward = new HashMap<>();
-        forwardImage = new HashMap<>();
-        isForward = new HashMap<>();
-        items = new ArrayList<>();
-        this.name = name;
+    public void setLocationMap(int i, Image image) {
+        locationMap.put(i, image);
     }
-    public void setLocationMap(int i,Image image){
-        locationMap.put(i,image);
-    }
-    public Image getLocationMap(int i){
-        return locationMap.get(i);
+
+    public Image getLocationMap(int i) {
+        if (locationMap.get(i) != null)
+            return locationMap.get(i);
+        else {
+            setLocationMap(i, new Image(locationMapUrl.get(i)));
+            return locationMap.get(i);
+        }
     }
 }
