@@ -6,6 +6,7 @@ import sun.applet.Main;
 
 /**
  * Created by cbhzhun on 2016/11/21.
+ * This class use to show the user's movement log
  */
 public class TextFlowOutput extends MainController {
     public void TextFlowOutputController(){
@@ -21,7 +22,7 @@ public class TextFlowOutput extends MainController {
         return new Text("\nMove forward is avaiable!");
     }
     public Text moveToNewLocation(){
-        return new Text("\n=====================================\n" +
+        return new Text("\n================================\n" +
                 "Moved to "+ myWold.getCurrentLocation().getName() +
                 "\n Facing to " + myWold.getCurrentLocation().getName() + myWold.getCurrentFace());
     }

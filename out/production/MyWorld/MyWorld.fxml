@@ -16,6 +16,7 @@
           <Menu mnemonicParsing="false" text="World">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#ImportFile" text="Import" />
+                  <MenuItem mnemonicParsing="false" onAction="#ClickImportFormRemote" text="Import From Remote" />
                   <MenuItem mnemonicParsing="false" onAction="#quitApplication" text="Quit" />
             </items>
           </Menu>

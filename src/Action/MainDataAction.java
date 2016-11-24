@@ -7,13 +7,23 @@ import java.io.File;
 
 /**
  * Created by cbhzhun on 2016/11/20.
+ * This class use to update cache
  */
 public class MainDataAction extends MainController {
+    /**
+     * Init
+     */
     public MainDataAction(){
+        //set these variable as-1 means user don't choose anything
         myWold.setCurrentItemId(-1);
         myWold.setCurrentPickItemId(-1);
        // currentItemId = currentPickItemId = -1;
     }
+
+    /**
+     * Update cache about items
+     * save item which want to put into current location's cache and delete from items' cache
+     */
     public void PutItemAction(){
         int deletid = -1;
         for(int i=0;i<myWold.getMyItems().size();i++)
@@ -29,6 +39,10 @@ public class MainDataAction extends MainController {
           //  myItems.remove(deletid);
         }
     }
+    /**
+     * Update cache about items
+     * save item which want to put into items' cache and delete from current location's cache
+     */
     public void PickItemAction(){
         int deletid = -1;
         for(int i=0;i<myWold.getCurrentLocation().getItem().size();i++)
@@ -43,6 +57,12 @@ public class MainDataAction extends MainController {
            // currentLocation.deleteItem(deletid);
         }
     }
+
+    /**
+     * Read all data and save them into cache
+     * @param file xmlfile
+     * @throws Exception
+     */
     public void readXMLFile(File file) throws Exception{
         xmlReader.setXmlFile(file);
         xmlReader.read();

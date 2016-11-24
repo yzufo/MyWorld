@@ -2,6 +2,7 @@ package MyWorldController;
 
 import MainEntry.MyMainEntry;
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,7 +11,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
+import Action.XMLReader;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.io.*;
@@ -20,13 +21,22 @@ import java.util.ResourceBundle;
 
 /**
  * Created by cbhzhun on 2016/11/21.
+ * This is fistPane's Controller
  */
 public class FirstController implements Initializable{
     private MyMainEntry application;
+    private XMLReader xmlReader = new XMLReader();
 
     @FXML private Button firstPageButton1,firstPageButton2;
+
+    /**
+     * init buttons' EventHandlers
+     * @param application let Main stage show this pane
+     */
     public void setApp(MyMainEntry application){
         this.application = application;
+        //Set EventHandler of OnMouseEntryEvent and OnMouseExitEvent
+        //Show and hide DropShadow when mouse entry and exit
         firstPageButton1.setOnMouseEntered(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
@@ -54,44 +64,60 @@ public class FirstController implements Initializable{
             }
         });
     }
-    @FXML
-    public void ClickImportButton() throws Exception{
-        Stage stage = new Stage();
-        stage.setTitle("Choose XML File");
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XML", "*.xml"));
-        File file = fileChooser.showOpenDialog(stage);
-        application.loadMainWindow(file);
+
+    /**
+     * Implement mouse click Import Button's event
+     * Form file Chooser
+     */
+    public void ClickImportButton() {
+        File file;
+        try{
+            file = xmlReader.getXMLFileFromLocal();
+            if(file == null) {
+                return;
+            }
+            application.loadMainWindow(file);
+        }catch (Exception e){
+            e.printStackTrace();
+            xmlReader.ThrowError();
+            return;
+        }
     }
+
+    /**
+     * Implement mouse click ImportFromRemote Button's event
+     * Load from internet
+     * @throws Exception
+     */
     public void importFromRemote() throws Exception{
-        URL url = new URL("http://45.32.181.45/Source/MyWorld/MyWorld.xml");
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.connect();
-        InputStream inputStream = con.getInputStream();
-        byte[] getData = readInputStream(inputStream);
-        File file = new File("temp.xml");
-        FileOutputStream fos = new FileOutputStream(file);
-        fos.write(getData);
-        inputStream.close();
-        application.loadMainWindow(file);
+        File file;
+        try {
+            file = xmlReader.getXMLFileFromRemote();
+            if(file == null){
+                return;
+            }
+            application.loadMainWindow(file);
+        }catch (Exception e){
+            e.printStackTrace();
+            xmlReader.ThrowError();
+            return;
+        }
     }
+    /**
+     * Implement mouse click Quit Button's event
+     * Exit application
+     */
     public void ClickQuitButton(){
         System.exit(1);
     }
-    public void FirstController(MyMainEntry application){
+
+    /**
+     * Init
+     */
+    public void FirstController(){
 
     }
-    public static  byte[] readInputStream(InputStream inputStream) throws IOException {
-        byte[] buffer = new byte[1024];
-        int len = 0;
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        while((len = inputStream.read(buffer)) != -1) {
-            bos.write(buffer, 0, len);
-        }
-        bos.close();
-        return bos.toByteArray();
-    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
