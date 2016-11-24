@@ -5,9 +5,9 @@
 	<Name>Gateway Apts Public Area</Name>
 	<MapUrl>Source/MyWorld/Images/Map/1.jpg</MapUrl>
 	<NaviImageUrl>Source/MyWorld/Images/Map/2.png</NaviImageUrl>
-	<LocationNumber>6</LocationNumber>
-	<CurrentLocation>1</CurrentLocation>
-	<CurrentFace>1</CurrentFace>
+	<LocationNumber>7</LocationNumber>
+	<CurrentLocation>7</CurrentLocation>
+	<CurrentFace>3</CurrentFace>
 	<Location1 Id="1" X="180" Y="90">
 		<LocationName>ReceptionCorner</LocationName>
 		<ImagesNumber>4</ImagesNumber>
@@ -16,8 +16,10 @@
 			<ForwardLocationId>3</ForwardLocationId>
 			<ForwardImage>1</ForwardImage>
 		</Images1>
-		<Images2 Id="2" isForward="0">
+		<Images2 Id="2" isForward="1">
 			<Url>Source/MyWorld/Images/ReceptionCorner/2.jpg</Url>
+			<ForwardLocationId>7</ForwardLocationId>
+			<ForwardImage>2</ForwardImage>
 		</Images2>
 		<Images3 Id="3" isForward="1">
 			<Url>Source/MyWorld/Images/ReceptionCorner/3.jpg</Url>
@@ -83,7 +85,7 @@
 		<Images3 Id="3" isForward="1">
 			<Url>Source/MyWorld/Images/Aisle/3.jpg</Url>
 			<ForwardLocationId>6</ForwardLocationId>
-			<ForwardImage>3</ForwardImage>
+			<ForwardImage>6</ForwardImage>
 		</Images3>
 		<Images4 Id="4" isForward="1">
 			<Url>Source/MyWorld/Images/Aisle/4.jpg</Url>
@@ -111,10 +113,11 @@
 		</Images4>
 	</Location5>
 
-	<Location6 Id="6" X="50" Y="110">
+	<Location6 Id="6" X="50" Y="110" hasPane="true">
 		<LocationName>CommonRoom</LocationName>
-		<ImagesNumber>4</ImagesNumber>
-		<Images1 Id="1" isForward="1">
+		<Pano>Source/MyWorld/Images/CommonRoom/0.jpg</Pano>
+		<ImagesNumber>8</ImagesNumber>
+		<Images1 Id="1" isForward="1" X="0.074" Range="0.074">
 			<Url>Source/MyWorld/Images/CommonRoom/1.jpg</Url>
 			<ForwardLocationId>4</ForwardLocationId>
 			<ForwardImage>1</ForwardImage>
@@ -128,7 +131,37 @@
 		<Images4 Id="4" isForward="0">
 			<Url>Source/MyWorld/Images/CommonRoom/4.jpg</Url>
 		</Images4>
+		<Images5 Id="5" isForward="0">
+			<Url>Source/MyWorld/Images/CommonRoom/5.jpg</Url>
+		</Images5>
+		<Images6 Id="6" isForward="0">
+			<Url>Source/MyWorld/Images/CommonRoom/6.jpg</Url>
+		</Images6>
+		<Images7 Id="7" isForward="0">
+			<Url>Source/MyWorld/Images/CommonRoom/7.jpg</Url>
+		</Images7>
+		<Images8 Id="8" isForward="0">
+			<Url>Source/MyWorld/Images/CommonRoom/8.jpg</Url>
+		</Images8>
 	</Location6>
+	<Location7 Id="7" X="180" Y="130">
+		<LocationName>Reception</LocationName>
+		<ImagesNumber>4</ImagesNumber>
+		<Images1 Id="1" isForward="0">
+			<Url>Source/MyWorld/Images/Reception/1.jpg</Url>
+		</Images1>
+		<Images2 Id="2" isForward="0">
+			<Url>Source/MyWorld/Images/Reception/2.jpg</Url>
+		</Images2>
+		<Images3 Id="3" isForward="0">
+			<Url>Source/MyWorld/Images/Reception/3.jpg</Url>
+		</Images3>
+		<Images4 Id="4" isForward="1">
+			<ForwardLocationId>1</ForwardLocationId>
+			<ForwardImage>4</ForwardImage>
+			<Url>Source/MyWorld/Images/Reception/4.jpg</Url>
+		</Images4>
+	</Location7>
 	<ItemsNumber>4</ItemsNumber>
 	<Items>
 		<Item1>Source/MyWorld/Images/Items/1.png</Item1>

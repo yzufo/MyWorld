@@ -202,6 +202,9 @@ public class XMLReader {
             location.setX(Double.parseDouble(element.attributeValue("X")));
             location.setY(Double.parseDouble(element.attributeValue("Y")));
             int imageNumber = Integer.parseInt(element.element("ImagesNumber").getText());
+            location.setHasPano(Boolean.parseBoolean(element.attributeValue("hasPane")));
+            if(location.getHasPano())
+                location.setLocationMapUrl(0,mainUrl + element.element("Pano").getText());
             location.setImageNumber(imageNumber);
             for (int j = 1; j <= imageNumber; j++) {
                 Element elementImage = element.element(String.format("Images%d", j));
@@ -212,6 +215,10 @@ public class XMLReader {
                     location.setIsForward(j, 1);
                     location.setForward(j, Integer.parseInt(elementImage.element("ForwardLocationId").getText()));
                     location.setForwardImage(j, Integer.parseInt(elementImage.element("ForwardImage").getText()));
+                    if(location.getHasPano()){
+                        location.setStartX(j,Double.parseDouble(elementImage.attributeValue("X")));
+                        location.setRange(j,Double.parseDouble(elementImage.attributeValue("Range")));
+                    }
                 } else {
                     location.setIsForward(j, 0);
                 }

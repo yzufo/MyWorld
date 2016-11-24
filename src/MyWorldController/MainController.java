@@ -7,16 +7,19 @@ import MainEntry.MyMainEntry;
 import Model.Item;
 import MyWorldCache.WorldCache;
 import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
@@ -46,9 +49,14 @@ public class MainController implements Initializable {
     private HBox mainViewBox, itemsHbox, mapViewBox;
     @FXML
     private Button leftButton, forwardButton, rightButton;
-    private ImageView mainImageView, mapImageView, naviImageView;
+    @FXML
+    private ImageView mainImageView,mapImageView, naviImageView;
     @FXML
     private TextFlow textFlow;
+    @FXML
+    private CheckMenuItem checkRegular, checkPano;
+    private Boolean hasPano;
+    private Double panoX = 0.0, imageHeigh, viewWidth, imageWidth, pressX;
 
     public void setApp(MyMainEntry application) {
         this.application = application;
@@ -60,6 +68,7 @@ public class MainController implements Initializable {
     public void Initialise() {
         myWold = new WorldCache();
         xmlReader = new XMLReader();
+        checkRegular.setSelected(true);
 
         mainDataAction = new MainDataAction();
         textFlowOutput = new TextFlowOutput();
@@ -79,6 +88,7 @@ public class MainController implements Initializable {
         mainImageView.setFitHeight(400);
         mainImageView.setPreserveRatio(true);
         mainImageView.setId("999");
+        mainViewInit();
 
         leftButton.setDisable(true);
         rightButton.setDisable(true);
@@ -199,13 +209,21 @@ public class MainController implements Initializable {
         });
     }
 
+    public void setPano() {
+        mainImageView.setImage(myWold.getCurrentLocation().getLocationMap(0));
+        mainImageView.setViewport(new javafx.geometry.Rectangle2D(panoX, 0, viewWidth, imageHeigh));
+    }
+
     /**
      * Update main image (location's images)
      * when user put or pick items, turn left or right and go forward
      */
     public void showImage() {
-
-        mainImageView.setImage(myWold.getCurrentLocation().getLocationMap(myWold.getCurrentFace()));// set location image as main background image
+        if (checkPano.isSelected()) {
+            setPano();
+        } else {// set location image as main background image
+            mainImageView.setImage(myWold.getCurrentLocation().getLocationMap(myWold.getCurrentFace()));
+        }
         mainViewBox.getChildren().clear();
         //Show items in the main viw, create a group to contain all items ImageView
         Group groupView = new Group();
@@ -234,6 +252,51 @@ public class MainController implements Initializable {
             }
         });
         mainViewBox.getChildren().add(groupView);
+    }
+
+    public void mainViewInit() {
+        mainImageView.setOnMousePressed(new EventHandler<javafx.scene.input.MouseEvent>() {
+            @Override
+            public void handle(javafx.scene.input.MouseEvent event) {
+                if (!checkPano.isSelected())
+                    return;
+                pressX = event.getScreenX();
+            }
+        });
+        mainImageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(!checkPano.isSelected())
+                    return;
+                panoX -= ((event.getScreenX() - pressX) / viewWidth) * imageWidth;
+                panoX = panoX < 0 ? imageWidth - viewWidth : panoX;
+                panoX = panoX > imageWidth - viewWidth ? 0 : panoX;
+            }
+        });
+        mainImageView.setOnMouseDragged(new EventHandler<javafx.scene.input.MouseEvent>() {
+            @Override
+            public void handle(javafx.scene.input.MouseEvent event) {
+                if (!checkPano.isSelected())
+                    return;
+                System.out.println(event.getX());
+                double tmp = panoX - ((event.getScreenX() - pressX) / viewWidth) * imageWidth;
+                tmp = tmp < 0 ? imageWidth - viewWidth : tmp;
+                tmp = tmp > imageWidth - viewWidth ? 0 : tmp;
+                mainImageView.setViewport(new javafx.geometry.Rectangle2D(tmp, 0, viewWidth, imageHeigh));
+                forwardButton.setDisable(true);
+                for (int i = 1; i <= myWold.getCurrentLocation().getImageNumber(); i++) {
+                    if (myWold.getCurrentLocation().getIsForward(i) == 1) {
+                        Double tmpx = myWold.getCurrentLocation().getStartX(i) * imageWidth;
+                        Double tmpy = tmpx + (myWold.getCurrentLocation().getRange(i) * imageWidth);
+                        if (panoX < tmpx && tmpy < panoX + viewWidth) {
+                            forwardButton.setDisable(false);
+                            myWold.setCurrentFace(i);
+                            textFlow.getChildren().add(textFlowOutput.outputForwardAvaiable());
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -277,6 +340,8 @@ public class MainController implements Initializable {
      * Implement mouse click turn left button's event and update cache
      */
     public void ClickForwardButton() {
+        checkPano.setSelected(false);
+        checkRegular.setSelected(true);
         myWold.replace(myWold.getCurrentLocationId(), myWold.getCurrentLocation());
         // allLocations.replace(currentLocationId, currentLocation);
         myWold.setCurrentLocationId(myWold.getCurrentLocation().getForward(myWold.getCurrentFace()));
@@ -285,10 +350,49 @@ public class MainController implements Initializable {
         // currentFace = currentLocation.getForwardImage(currentFace);
         myWold.setCurrentLocation(myWold.getAllLocations().get(myWold.getCurrentLocationId()));
         //currentLocation = allLocations.get(currentLocationId);
+        if (myWold.getCurrentLocation().getHasPano()) {
+            checkPano.setDisable(false);
+        } else {
+            checkPano.setDisable(true);
+            leftButton.setDisable(false);
+            rightButton.setDisable(false);
+        }
+        setMainImageViewPort(myWold.getCurrentFace());
+        mainImageView.setViewport(new javafx.geometry.Rectangle2D(0, 0, imageWidth, imageHeigh));
         showImage();
         showMap();
         checkForward();
         textFlow.getChildren().add(textFlowOutput.moveToNewLocation());
+    }
+
+    public void setMainImageViewPort(int i) {
+        imageHeigh = myWold.getCurrentLocation().getLocationMap(i).getHeight();
+        imageWidth = myWold.getCurrentLocation().getLocationMap(i).getWidth();
+    }
+
+    public void ClickCheckPano() {
+        checkRegular.setSelected(false);
+        checkPano.setSelected(true);
+        leftButton.setDisable(true);
+        rightButton.setDisable(true);
+        hasPano = true;
+        setMainImageViewPort(0);
+        viewWidth = (imageHeigh / 4) * 3;
+        showImage();
+    }
+
+    public void ClickCheckRegular() {
+        checkPano.setSelected(false);
+        checkRegular.setSelected(true);
+        leftButton.setDisable(false);
+        rightButton.setDisable(false);
+        int tmp = (int) Math.ceil((panoX / imageWidth) * myWold.getCurrentLocation().getImageNumber());
+        tmp = tmp <= 0 ? 1 : tmp;
+        tmp = tmp > myWold.getCurrentLocation().getImageNumber() ? myWold.getCurrentLocation().getImageNumber() : tmp;
+        myWold.setCurrentFace(tmp);
+        setMainImageViewPort(myWold.getCurrentFace());
+        mainImageView.setViewport(new javafx.geometry.Rectangle2D(0, 0, imageWidth, imageHeigh));
+        showImage();
     }
 
     /**
@@ -301,6 +405,11 @@ public class MainController implements Initializable {
             textFlow.getChildren().add(textFlowOutput.outputForwardAvaiable());
         } else
             forwardButton.setDisable(true);
+        if (myWold.getCurrentLocation().getHasPano()) {
+            checkPano.setDisable(false);
+        } else {
+            checkPano.setDisable(true);
+        }
     }
 
     /**

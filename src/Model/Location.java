@@ -1,6 +1,7 @@
 package Model;
 
 import javafx.scene.image.Image;
+import org.omg.PortableInterceptor.INACTIVE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,9 @@ public class Location {
     //isForward :this direction can go forward or not
     private HashMap<Integer, Integer> forward, forwardImage, isForward;
     private HashMap<Integer, String> locationMapUrl;
+    private HashMap<Integer,Double> startX;
+    private Boolean hasPano = false;
+    private HashMap<Integer,Double> range;
     private List<Item> items;//save items which have been put in this location
     private double X, Y; // this location's position in the map
     private int imageNumber; // How much directions in this location
@@ -35,7 +39,17 @@ public class Location {
         isForward = new HashMap<>();
         items = new ArrayList<>();
         locationMapUrl = new HashMap<>();
+        startX = new HashMap<>();
+        range = new HashMap<>();
         this.name = name;
+    }
+
+    public Boolean getHasPano() {
+        return hasPano;
+    }
+
+    public void setHasPano(Boolean hasPano) {
+        this.hasPano = hasPano;
     }
 
     public String getLocationMapUrl(int i) {
@@ -115,6 +129,11 @@ public class Location {
     public void setLocationMap(int i, Image image) {
         locationMap.put(i, image);
     }
+
+    public void setStartX(int i,double tmpx){startX.put(i,tmpx);}
+    public Double getStartX(int i){return startX.get(i);}
+    public void setRange(int i,double tmpRange){range.put(i,tmpRange);}
+    public Double getRange(int i){return range.get(i);}
 
     public Image getLocationMap(int i) {
         if (locationMap.get(i) != null)
