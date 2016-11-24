@@ -1,6 +1,5 @@
 package MyWorldCache;
 
-import Action.TextFlowOutput;
 import Model.Item;
 import Model.Location;
 
@@ -17,22 +16,26 @@ public class WorldCache {
     private Location currentLocation;
     private int currentFace, currentItemId, currentPickItemId, currentLocationId;
 
-    public void deleteItem(int deletid){
+    public void deleteItem(int deletid) {
         currentLocation.deleteItem(deletid);
     }
-    public void add(int id,Item item){
-        myItems.add(id,item);
+
+    public void add(int id, Item item) {
+        myItems.add(id, item);
     }
-    public void remove(int deletid){
+
+    public void remove(int deletid) {
         myItems.remove(deletid);
     }
 
-    public void addItem(int deletid){
+    public void addItem(int deletid) {
         currentLocation.addItem(myItems.get(deletid));
     }
-    public void replace(int id, Location location){
-        allLocations.replace(id,location);
+
+    public void replace(int id, Location location) {
+        allLocations.replace(id, location);
     }
+
     public HashMap<Integer, Location> getAllLocations() {
         return allLocations;
     }
@@ -90,8 +93,7 @@ public class WorldCache {
     }
 
 
-
-    public void World(){
+    public void World() {
         allLocations = new HashMap<>();
         myItems = new ArrayList<>();
         currentLocation = new Location(null);

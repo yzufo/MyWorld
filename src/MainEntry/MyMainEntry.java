@@ -22,6 +22,7 @@ public class MyMainEntry extends Application {
     public static Stage stage;
     private String mainUrl;
     private Properties properties = new Properties();
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -52,6 +53,7 @@ public class MyMainEntry extends Application {
 
     /**
      * Pass xmlfile to mainPane's controller and show mainPane
+     *
      * @param file xmlfile
      */
     public void loadMainWindow(File file) {
@@ -72,6 +74,7 @@ public class MyMainEntry extends Application {
 
     /**
      * replaceSecenContent (from firstPane to mainPane), load new fxml file
+     *
      * @param fxml path of fxml
      * @return
      * @throws Exception
@@ -85,7 +88,7 @@ public class MyMainEntry extends Application {
         if (isRemote.equals("1")) {     // Use different ways to get css file depends on it's location(local or remote)
             File file = new XMLReader().getFileFromUrl(properties.get("Url").toString(), "tmp.css");
             scene.getStylesheets().add("file:///" + mainUrl + file.getPath());
-        } else{
+        } else {
             scene.getStylesheets().add("file:///" + mainUrl + "Source/" + cssFile + "/" + cssFile + ".css");
         }
         stage.setScene(scene);

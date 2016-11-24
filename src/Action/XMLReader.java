@@ -33,6 +33,7 @@ public class XMLReader {
 
     /**
      * Use inputstream to save online file
+     *
      * @param inputStream inputStream from remote
      * @return xmlfile
      * @throws IOException
@@ -50,14 +51,17 @@ public class XMLReader {
 
     /**
      * Get init Location When user just import this world
+     *
      * @return location id
      * @throws Exception
      */
     public int getInitLocation() throws Exception {
         return Integer.parseInt(this.rootElement.element("CurrentLocation").getText());
     }
+
     /**
      * Get init direction When user just import this world
+     *
      * @return direction id
      * @throws Exception
      */
@@ -67,6 +71,7 @@ public class XMLReader {
 
     /**
      * init
+     *
      * @param xmlFile
      */
     public void setXmlFile(File xmlFile) {
@@ -75,6 +80,7 @@ public class XMLReader {
 
     /**
      * Read items' Image and save into cache
+     *
      * @return Item List
      * @throws Exception
      */
@@ -105,6 +111,7 @@ public class XMLReader {
 
     /**
      * read map's image and save into cache
+     *
      * @return map's Iamge
      * @throws Exception
      */
@@ -114,6 +121,7 @@ public class XMLReader {
 
     /**
      * read naviArrow's image and save into cache
+     *
      * @return naviArrow's image
      * @throws Exception
      */
@@ -123,6 +131,7 @@ public class XMLReader {
 
     /**
      * show a dialog to let user choose xml file to import
+     *
      * @return xmlfile
      * @throws Exception
      */
@@ -139,6 +148,7 @@ public class XMLReader {
 
     /**
      * show a dialog to let user input xml file (online url) to load xml file
+     *
      * @return xmlfile
      * @throws Exception
      */
@@ -158,7 +168,8 @@ public class XMLReader {
 
     /**
      * Create a connection to download xml file
-     * @param tmpUrl file's url
+     *
+     * @param tmpUrl   file's url
      * @param filename tmp file's name
      * @return xml file
      * @throws Exception
@@ -178,6 +189,7 @@ public class XMLReader {
 
     /**
      * Read all Location's information
+     *
      * @return a hashmap which store all location's information
      * @throws Exception
      */
@@ -193,8 +205,8 @@ public class XMLReader {
             location.setImageNumber(imageNumber);
             for (int j = 1; j <= imageNumber; j++) {
                 Element elementImage = element.element(String.format("Images%d", j));
-                location.setLocationMap(j, new Image(mainUrl + elementImage.element("Url").getText()));
-
+                //location.setLocationMap(j, new Image(mainUrl + elementImage.element("Url").getText()));
+                location.setLocationMapUrl(j,mainUrl + elementImage.element("Url").getText());
                 String isForward = elementImage.attributeValue("isForward");
                 if (isForward.equals("1")) {
                     location.setIsForward(j, 1);
@@ -211,6 +223,7 @@ public class XMLReader {
 
     /**
      * Read xml file and transform to Document
+     *
      * @throws Exception
      */
     public void read() throws Exception {

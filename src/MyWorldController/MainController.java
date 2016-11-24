@@ -92,6 +92,7 @@ public class MainController implements Initializable {
                     textContainer.setVvalue(1.0f);
                 }));
     }
+
     /**
      * Implement mouse click Import menuItem's event
      * Form file Chooser
@@ -100,13 +101,14 @@ public class MainController implements Initializable {
         File file;
         try {
             file = xmlReader.getXMLFileFromLocal();
-            if(file == null) return;
+            if (file == null) return;
             Import(file);
         } catch (Exception e) {
             e.printStackTrace();
             xmlReader.ThrowError();
         }
     }
+
     /**
      * Implement mouse click ImportFormRemote menuItem's event
      * Form file Chooser
@@ -115,7 +117,7 @@ public class MainController implements Initializable {
         File file;
         try {
             file = xmlReader.getXMLFileFromRemote();
-            if(file == null)return;
+            if (file == null) return;
             Import(file);
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,6 +129,7 @@ public class MainController implements Initializable {
      * Import all data into cache
      * init Image(mainIamge, iteamImage and mapImage)
      * set turnLeft button and turnRight button visible
+     *
      * @param file xmlfile
      */
     public void Import(File file) {
@@ -155,6 +158,7 @@ public class MainController implements Initializable {
         showItem();
         showImage();
     }
+
     /**
      * Implement mouse click pickItem menuItem's event
      */
@@ -164,6 +168,7 @@ public class MainController implements Initializable {
         showImage();
         showItem();
     }
+
     /**
      * After pick or put event, update images which display in item's Hbox and main Hbox
      */
@@ -244,6 +249,7 @@ public class MainController implements Initializable {
         Group mapGroup = new Group(mapImageView, naviImageView);
         mapViewBox.getChildren().add(mapGroup);
     }
+
     /**
      * Implement mouse click turn left button's event and update cache
      */
@@ -255,6 +261,7 @@ public class MainController implements Initializable {
         checkForward();
         textFlow.getChildren().add(textFlowOutput.outputTurnLeft());
     }
+
     /**
      * Implement mouse click turn left button's event and update cache
      */
@@ -265,6 +272,7 @@ public class MainController implements Initializable {
         checkForward();
         textFlow.getChildren().add(textFlowOutput.outputTurnRight());
     }
+
     /**
      * Implement mouse click turn left button's event and update cache
      */
@@ -308,6 +316,7 @@ public class MainController implements Initializable {
         else
             pickMenu.setDisable(false);
     }
+
     /**
      * Implement mouse click quit button's event, exit application
      */

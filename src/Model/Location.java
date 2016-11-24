@@ -18,6 +18,7 @@ public class Location {
     //forwardImage: next location's direction
     //isForward :this direction can go forward or not
     private HashMap<Integer, Integer> forward, forwardImage, isForward;
+    private HashMap<Integer, String> locationMapUrl;
     private List<Item> items;//save items which have been put in this location
     private double X, Y; // this location's position in the map
     private int imageNumber; // How much directions in this location
@@ -33,10 +34,20 @@ public class Location {
         forwardImage = new HashMap<>();
         isForward = new HashMap<>();
         items = new ArrayList<>();
+        locationMapUrl = new HashMap<>();
         this.name = name;
     }
 
+    public String getLocationMapUrl(int i) {
+        return locationMapUrl.get(i);
+    }
+
+    public void setLocationMapUrl(int i, String tmpUrl) {
+        this.locationMapUrl.put(i, tmpUrl);
+    }
+
     //Getters and Setters
+
     public String getName() {
         return name;
     }
@@ -106,6 +117,11 @@ public class Location {
     }
 
     public Image getLocationMap(int i) {
-        return locationMap.get(i);
+        if (locationMap.get(i) != null)
+            return locationMap.get(i);
+        else {
+            setLocationMap(i, new Image(locationMapUrl.get(i)));
+            return locationMap.get(i);
+        }
     }
 }
