@@ -6,8 +6,8 @@
         <option name="appClass" value="MainEntry.MyMainEntry" />
         <option name="description" value="" />
         <option name="htmlPlaceholderId" value="" />
-        <option name="title" value="MyWorld" />
-        <option name="vendor" value="UOE" />
+        <option name="title" value="" />
+        <option name="vendor" value="" />
         <option name="version" value="" />
       </options>
     </properties>
@@ -16,9 +16,9 @@
         <element id="module-output" name="MyWorld" />
         <element id="file-copy" path="$PROJECT_DIR$/src/MyWorld.fxml" />
         <element id="file-copy" path="$PROJECT_DIR$/src/MyWorldInit.fxml" />
-        <element id="file-copy" path="$USER_HOME$/Downloads/dom4j-1.6.1.jar" />
+        <element id="file-copy" path="$PROJECT_DIR$/../TEST/MyWorld.properties" />
+        <element id="file-copy" path="$PROJECT_DIR$/src/dom4j-1.6.1.jar" />
       </element>
-      <element id="file-copy" path="$PROJECT_DIR$/src/MyWorld.properties" />
     </root>
   </artifact>
 </component>

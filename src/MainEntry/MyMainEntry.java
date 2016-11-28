@@ -34,7 +34,7 @@ public class MyMainEntry extends Application {
         primaryStage.setResizable(false);
         stage = primaryStage;
         stage.setTitle("Import File");
-        stage.initStyle(StageStyle.UNDECORATED);
+        //stage.initStyle(StageStyle.UNDECORATED);
         loadFirstWindow();
         stage.show();
     }
@@ -66,6 +66,7 @@ public class MyMainEntry extends Application {
                 e.printStackTrace();
                 loadFirstWindow();
             }
+            stage.setTitle("World");
             mainController.setApp(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,19 +80,25 @@ public class MyMainEntry extends Application {
      * @return
      * @throws Exception
      */
-    private Initializable replaceSceneContent(String fxml) throws Exception {
+    private Initializable replaceSceneContent(String fxml){
         FXMLLoader loader = new FXMLLoader();
-        Pane page = loader.load(this.getClass().getResource(fxml).openStream());
+        Pane page = new Pane();
         Scene scene = new Scene(page);
-        String cssFile = properties.get("WordName").toString();
-        String isRemote = properties.get("isRemote").toString();
-        if (isRemote.equals("1")) {     // Use different ways to get css file depends on it's location(local or remote)
-            File file = new XMLReader().getFileFromUrl(properties.get("Url").toString(), "tmp.css");
-            scene.getStylesheets().add("file:///" + mainUrl + file.getPath());
-        } else {
-            scene.getStylesheets().add("file:///" + mainUrl + "Source/" + cssFile + "/" + cssFile + ".css");
+        try {
+             page = loader.load(this.getClass().getResource(fxml).openStream());
+             scene = new Scene(page);
+            String cssFile = properties.get("WordName").toString();
+            String isRemote = properties.get("isRemote").toString();
+            stage.setScene(scene);
+            if (isRemote.equals("1")) {     // Use different ways to get css file depends on it's location(local or remote)
+                File file = new XMLReader().getFileFromUrl(properties.get("Url").toString(), "tmp.css");
+                scene.getStylesheets().add("file://" + mainUrl + file.getPath());
+            } else {
+                scene.getStylesheets().add("file://" + mainUrl + "screendumps/" + cssFile + "/" + cssFile + ".css");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        stage.setScene(scene);
         return (Initializable) loader.getController();
     }
 }

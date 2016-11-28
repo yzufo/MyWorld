@@ -50,7 +50,7 @@ public class MainController implements Initializable {
     @FXML
     private Button leftButton, forwardButton, rightButton;
     @FXML
-    private ImageView mainImageView,mapImageView, naviImageView;
+    private ImageView mainImageView, mapImageView, naviImageView;
     @FXML
     private TextFlow textFlow;
     @FXML
@@ -111,7 +111,8 @@ public class MainController implements Initializable {
         File file;
         try {
             file = xmlReader.getXMLFileFromLocal();
-            if (file == null) return;
+            if (file == null)
+                return;
             Import(file);
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,7 +128,8 @@ public class MainController implements Initializable {
         File file;
         try {
             file = xmlReader.getXMLFileFromRemote();
-            if (file == null) return;
+            if (file == null)
+                return;
             Import(file);
         } catch (Exception e) {
             e.printStackTrace();
@@ -188,6 +190,8 @@ public class MainController implements Initializable {
             myWold.setCurrentItemId(-1);
             ImageView imageView = new ImageView();
             imageView.setImage(item.getImage());
+            imageView.setFitHeight(64);
+            imageView.setFitWidth(64);
             imageView.setId(String.valueOf(item.getItemId()));
             imageView.setOnMouseClicked(event -> {
                 myWold.setCurrentItemId(Integer.parseInt(imageView.getId()));
@@ -254,6 +258,10 @@ public class MainController implements Initializable {
         mainViewBox.getChildren().add(groupView);
     }
 
+    /**
+     * Main view init
+     * set Mouse pressed, released and dragged events.
+     */
     public void mainViewInit() {
         mainImageView.setOnMousePressed(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
@@ -266,7 +274,7 @@ public class MainController implements Initializable {
         mainImageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if(!checkPano.isSelected())
+                if (!checkPano.isSelected())
                     return;
                 panoX -= ((event.getScreenX() - pressX) / viewWidth) * imageWidth;
                 panoX = panoX < 0 ? imageWidth - viewWidth : panoX;
@@ -278,7 +286,8 @@ public class MainController implements Initializable {
             public void handle(javafx.scene.input.MouseEvent event) {
                 if (!checkPano.isSelected())
                     return;
-                System.out.println(event.getX());
+                //System.out.println(event.getX());
+                // if user drag image to the end, then start from beginning automatic.
                 double tmp = panoX - ((event.getScreenX() - pressX) / viewWidth) * imageWidth;
                 tmp = tmp < 0 ? imageWidth - viewWidth : tmp;
                 tmp = tmp > imageWidth - viewWidth ? 0 : tmp;
@@ -288,6 +297,7 @@ public class MainController implements Initializable {
                     if (myWold.getCurrentLocation().getIsForward(i) == 1) {
                         Double tmpx = myWold.getCurrentLocation().getStartX(i) * imageWidth;
                         Double tmpy = tmpx + (myWold.getCurrentLocation().getRange(i) * imageWidth);
+                        //whether this direction can go forward
                         if (panoX < tmpx && tmpy < panoX + viewWidth) {
                             forwardButton.setDisable(false);
                             myWold.setCurrentFace(i);
@@ -343,13 +353,9 @@ public class MainController implements Initializable {
         checkPano.setSelected(false);
         checkRegular.setSelected(true);
         myWold.replace(myWold.getCurrentLocationId(), myWold.getCurrentLocation());
-        // allLocations.replace(currentLocationId, currentLocation);
         myWold.setCurrentLocationId(myWold.getCurrentLocation().getForward(myWold.getCurrentFace()));
-        //currentLocationId = currentLocation.getForward(currentFace);
         myWold.setCurrentFace(myWold.getCurrentLocation().getForwardImage(myWold.getCurrentFace()));
-        // currentFace = currentLocation.getForwardImage(currentFace);
         myWold.setCurrentLocation(myWold.getAllLocations().get(myWold.getCurrentLocationId()));
-        //currentLocation = allLocations.get(currentLocationId);
         if (myWold.getCurrentLocation().getHasPano()) {
             checkPano.setDisable(false);
         } else {
@@ -365,11 +371,19 @@ public class MainController implements Initializable {
         textFlow.getChildren().add(textFlowOutput.moveToNewLocation());
     }
 
+    /**
+     * get Images heigh and width
+     *
+     * @param i current location's image number
+     */
     public void setMainImageViewPort(int i) {
         imageHeigh = myWold.getCurrentLocation().getLocationMap(i).getHeight();
         imageWidth = myWold.getCurrentLocation().getLocationMap(i).getWidth();
     }
 
+    /**
+     * Implement Click check pano menu item
+     */
     public void ClickCheckPano() {
         checkRegular.setSelected(false);
         checkPano.setSelected(true);
@@ -381,17 +395,22 @@ public class MainController implements Initializable {
         showImage();
     }
 
+    /**
+     * Implement Click check regular menu item
+     */
     public void ClickCheckRegular() {
         checkPano.setSelected(false);
         checkRegular.setSelected(true);
         leftButton.setDisable(false);
         rightButton.setDisable(false);
+        //Set current direction base on the position of the panorama
         int tmp = (int) Math.ceil((panoX / imageWidth) * myWold.getCurrentLocation().getImageNumber());
         tmp = tmp <= 0 ? 1 : tmp;
         tmp = tmp > myWold.getCurrentLocation().getImageNumber() ? myWold.getCurrentLocation().getImageNumber() : tmp;
         myWold.setCurrentFace(tmp);
         setMainImageViewPort(myWold.getCurrentFace());
         mainImageView.setViewport(new javafx.geometry.Rectangle2D(0, 0, imageWidth, imageHeigh));
+        checkForward();
         showImage();
     }
 

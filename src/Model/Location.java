@@ -1,7 +1,6 @@
 package Model;
 
 import javafx.scene.image.Image;
-import org.omg.PortableInterceptor.INACTIVE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
